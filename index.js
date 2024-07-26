@@ -1,8 +1,29 @@
 import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
+import mongoose from "mongoose"
+
+import { gethealth } from "./connections/health.js"
+import { postplant,getplant,getplantid, putplantid, deleteplantid } from "./connections/plants.js"
+import { Errorid } from "./connections/error.js"
+
 const app=express()
 app.use(express.json())
+
+const dbConnection=async()=>{
+    const conn=await mongoose.connect(process.env.MongoDB_URL)
+    
+
+    if(conn){
+        console.log("MongoDB connected😊")
+    }else{
+        console.log("MongoDB not connected📞")
+    }
+}
+
+dbConnection();
+
+
 
 const Plants=[
     {
@@ -34,179 +55,14 @@ const Plants=[
         "description":"Good to propose"
     },
 ];
-app.post("/plant",(req,res)=>{
-    const{name,category,image,price,description}=req.body
 
-    const Randomid=Math.round(Math.random()*10000)
-
-    const newPlant={
-        id:Randomid,
-        name:name,
-        price:price,
-        description:description
-
-    }
-    if(!name){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"name is required"
-
-
-        })
-    }
-    if(!category){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"Category is required"
-
-
-        })
-    }
-    if(!image){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"Image is required"
-
-
-        })
-    }
-    if(!price){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"price is required"
-
-
-        })
-    }
-    if(!description){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"description is required"
-
-
-        })
-    }
-
-    Plants.push(newPlant)
-
-    res.json({
-        sucess:true,
-        Data:newPlant,
-        message:"Plant added Sucessfully"
-    })
-
-
-    
-
-})
-
-
-
-app.get("/plants",(req,res)=>{
-    res.json({
-        sucess:true,
-        Data:Plants,
-        message:"Data Fetched Sucessfully"
-    })
-
-})
-
-app.get("/plant/:id",(req,res)=>{
-    const {id}=req.params
-
-    const plant=Plants.find((p)=>p.id == id)
-    res.json({
-        success:plant ? true:false,
-        data:plant || null,
-        message:plant ? "Plant Fetched Sucessfully":"Cannot Be Found"
-    })
-})
-
-app.put("/plant/:id",(req,res)=>{
-    const{name,category,image,price,description}=req.body
-    const {id}=req.params
-
-    let index=-1
-
-    Plants.forEach((plant,i)=>{
-        if(plant.id==id){
-            index=i
-        }
-
-    })
-
-    const newObj={
-        id,name,category,image,price,description
-    }
-
-    if(index==-1){
-        res.json({
-            success:false,
-            message:"Plant not Found this id",
-            data:null
-        })
-
-    }else{
-        Plants[index]=newObj
-        return res.json({
-            success:true,
-            message:"Sucessfully updated new data",
-            data:newObj
-        })
-    }
-
-
-    
-
-})
-
-app.delete("/plant/:id",(req,res)=>{
-   
-    
-
-    const {id}=req.params
-
-    let index=-1
-
-    Plants.forEach((plant,i)=>{
-        if(plant.id==id){
-            index=i
-        }
-
-    })
-
-
-    if(index==-1){
-        return res.json({
-            success:false,
-            message:`Plant not found with id ${id}`
-        })
-    }
-
-    Plants.splice(index,1)
-
-    
-    res.json({
-        success:true,
-        message:"Plant Deleted Sucessfully",
-        data:null
-    })
-})
-
-
-app.use("*",(req,res)=>{
-    res.send(`<div>
-        <h1 style="text-align:center">404 Not Found</h1>
-        
-        </div>`
-    
-    )
-})
+app.get("/health",gethealth)
+app.post("/plant",postplant)
+app.get("/plants",getplant)
+app.get("/plant/:id",getplantid)
+app.put("/plant/:id",putplantid)
+app.delete("/plant/:id",deleteplantid)
+app.use("*",Errorid)
 
 
 
@@ -214,4 +70,5 @@ app.use("*",(req,res)=>{
 const PORT=process.env.PORT
 app.listen(PORT,()=>{
     console.log(`Server is running ${PORT} Port` );
+    
 })
