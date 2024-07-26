@@ -1,3 +1,35 @@
+
+const Plants=[
+    {
+        "id":2,
+        "name":"Bamboo tree",
+        "category":"indoor",
+        "image":"https://www.google.com/search?q=image+bamboo+tree&oq=image+bamboo+tree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIICAIQABgWGB4yCggDEAAYChgWGB4yCAgEEAAYFhgeMgoIBRAAGAoYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCTk4OTVqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8",
+        "price":"200",
+        "description":"Good to looking"
+    },
+
+    {
+        "id":5,
+        "name":"apple tree",
+        "category":"outdoor",
+        "image":"https://www.google.com/search?q=image+bamboo+tree&oq=image+bamboo+tree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIICAIQABgWGB4yCggDEAAYChgWGB4yCAgEEAAYFhgeMgoIBRAAGAoYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCTk4OTVqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8",
+        "price":"100",
+        "description":"Good to health"
+    },
+
+
+    {
+        
+        "id":6,
+        "name":"rose",
+        "category":"outdoor",
+        "image":"https://www.google.com/search?q=image+bamboo+tree&oq=image+bamboo+tree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIICAIQABgWGB4yCggDEAAYChgWGB4yCAgEEAAYFhgeMgoIBRAAGAoYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCTk4OTVqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8",
+        "price":"500",
+        "description":"Good to propose"
+    },
+];
+
 const postplant = (req,res)=>{
     const{name,category,image,price,description}=req.body
 
@@ -164,5 +196,7 @@ const deleteplantid=(req,res)=>{
 export{
     postplant,
     getplant,
-    getplantid,putplantid,deleteplantid
+    getplantid,
+    putplantid,
+    deleteplantid
 }
