@@ -1,98 +1,30 @@
 
-const Plants=[
-    {
-        "id":2,
-        "name":"Bamboo tree",
-        "category":"indoor",
-        "image":"https://www.google.com/search?q=image+bamboo+tree&oq=image+bamboo+tree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIICAIQABgWGB4yCggDEAAYChgWGB4yCAgEEAAYFhgeMgoIBRAAGAoYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCTk4OTVqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8",
-        "price":"200",
-        "description":"Good to looking"
-    },
+import Plant from "./../models/Plant.js"
+const Plants=[]
 
-    {
-        "id":5,
-        "name":"apple tree",
-        "category":"outdoor",
-        "image":"https://www.google.com/search?q=image+bamboo+tree&oq=image+bamboo+tree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIICAIQABgWGB4yCggDEAAYChgWGB4yCAgEEAAYFhgeMgoIBRAAGAoYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCTk4OTVqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8",
-        "price":"100",
-        "description":"Good to health"
-    },
-
-
-    {
-        
-        "id":6,
-        "name":"rose",
-        "category":"outdoor",
-        "image":"https://www.google.com/search?q=image+bamboo+tree&oq=image+bamboo+tree&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABiABDIICAIQABgWGB4yCggDEAAYChgWGB4yCAgEEAAYFhgeMgoIBRAAGAoYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMggICRAAGBYYHtIBCTk4OTVqMGoxNagCCLACAQ&sourceid=chrome&ie=UTF-8",
-        "price":"500",
-        "description":"Good to propose"
-    },
-];
-
-const postplant = (req,res)=>{
+const postplant = async(req,res)=>{
     const{name,category,image,price,description}=req.body
 
-    const Randomid=Math.round(Math.random()*10000)
+    
 
-    const newPlant={
-        id:Randomid,
+    const newPlant=new Plant({
+        
         name:name,
+        category:category,
+        image:image,
         price:price,
         description:description
 
-    }
-    if(!name){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"name is required"
+       })
 
+    const Savedplant=await newPlant.save();
+   
 
-        })
-    }
-    if(!category){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"Category is required"
-
-
-        })
-    }
-    if(!image){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"Image is required"
-
-
-        })
-    }
-    if(!price){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"price is required"
-
-
-        })
-    }
-    if(!description){
-        return res.json({
-            success:true,
-            Data:null,
-            message:"description is required"
-
-
-        })
-    }
-
-    Plants.push(newPlant)
+  
 
     res.json({
         sucess:true,
-        Data:newPlant,
+        Data:Savedplant,
         message:"Plant added Sucessfully"
     })
 
@@ -101,19 +33,22 @@ const postplant = (req,res)=>{
 
 }
 
-const getplant=(req,res)=>{
+const getplant=async(req,res)=>{
+
+    const allPlant= await Plant.find()
+
     res.json({
         sucess:true,
-        Data:Plants,
+        Data:allPlant,
         message:"Data Fetched Sucessfully"
     })
 
 }
 
-const getplantid=(req,res)=>{
+const getplantid=async (req,res)=>{
     const {id}=req.params
 
-    const plant=Plants.find((p)=>p.id == id)
+    const plant=await Plant.findOne({_id:id})
     res.json({
         success:plant ? true:false,
         data:plant || null,
@@ -121,68 +56,49 @@ const getplantid=(req,res)=>{
     })
 }
 
-const putplantid=(req,res)=>{
+const putplantid=async(req,res)=>{
     const{name,category,image,price,description}=req.body
     const {id}=req.params
+    const updatedResult= await Plant.updateOne({_id:id},{
+        $set:{
+            name:name,
+            category:category,
+            image:image,
+            price:price,
+            description:description
 
-    let index=-1
 
-    Plants.forEach((plant,i)=>{
-        if(plant.id==id){
-            index=i
         }
-
     })
 
-    const newObj={
-        id,name,category,image,price,description
-    }
+    const updatedPlant=await Plant.findById(id)
+    res.json({
+        Success:true,
+        message:"Plant Updated Successfully",
+        data:updatedPlant
+       
+    })
 
-    if(index==-1){
-        res.json({
-            success:false,
-            message:"Plant not Found this id",
-            data:null
-        })
+   
 
-    }else{
-        Plants[index]=newObj
-        return res.json({
-            success:true,
-            message:"Sucessfully updated new data",
-            data:newObj
-        })
-    }
+    
 
-
+   
     
 
 }
 
-const deleteplantid=(req,res)=>{
+const deleteplantid=async(req,res)=>{
    
     
 
     const {id}=req.params
 
-    let index=-1
-
-    Plants.forEach((plant,i)=>{
-        if(plant.id==id){
-            index=i
-        }
+    await Plant.deleteOne(
+    {
+        _id:id
 
     })
-
-
-    if(index==-1){
-        return res.json({
-            success:false,
-            message:`Plant not found with id ${id}`
-        })
-    }
-
-    Plants.splice(index,1)
 
     
     res.json({
