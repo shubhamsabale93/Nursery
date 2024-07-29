@@ -19,7 +19,7 @@ const dbConnection=async()=>{
     if(conn){
         console.log("MongoDB connected😊")
     }else{
-        console.log("MongoDB not connected📞")
+        console.log("MongoDB not connected yet📞")
     }
 }
 
