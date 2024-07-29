@@ -10,6 +10,7 @@ import { Errorid } from "./connections/error.js"
 
 const app=express()
 app.use(express.json())
+
 app.use(cors())
 
 const dbConnection=async()=>{
@@ -19,7 +20,7 @@ const dbConnection=async()=>{
     if(conn){
         console.log("MongoDB connected😊")
     }else{
-        console.log("MongoDB not connected yet📞")
+        console.log("MongoDB not connected yet📞🏠")
     }
 }
 
