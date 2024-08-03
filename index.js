@@ -2,7 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import mongoose from "mongoose"
-import cors from "cors"
+
 
 import { gethealth } from "./connections/health.js"
 import { postplant,getplant,getplantid, putplantid, deleteplantid } from "./connections/plants.js"
@@ -10,7 +10,7 @@ import { Errorid } from "./connections/error.js"
 
 const app=express()
 app.use(express.json())
-app.use(cors())
+
 
 const dbConnection=async()=>{
     const conn=await mongoose.connect(process.env.MongoDB_URL)
