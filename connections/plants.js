@@ -35,7 +35,7 @@ const postplant = async(req,res)=>{
 
 const getplant=async(req,res)=>{
 
-    const allPlant= await Plant.find().sort({createdAt: -1})
+    const allPlant= await Plant.find().sort({updatedAt: -1})
 
     res.json({
         sucess:true,
